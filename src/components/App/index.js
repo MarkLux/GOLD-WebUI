@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import './index.css';
 import MenuAppBar from '../NavBar'
 import MenuList from '../MenuList'
-import FunctionTable from '../FunctionTable'
-import CreateFunction from '../CreateFunction'
 import { Grid } from '@material-ui/core';
 
+// this.props.children 会展示 router.js 中 <Route path="/" component={App}></Route> 中包含的路由组件
 class App extends Component {
   render() {
     const theme = createMuiTheme({
@@ -28,8 +26,9 @@ class App extends Component {
                         <MenuList />
                     </Grid>
                     <Grid item xs={10} style={{padding: '20px'}}>
-                        {/* <FunctionTable /> */}
-                        <CreateFunction />
+                        {
+                            this.props.children
+                        }
                     </Grid>
                 </Grid>
             </div>
