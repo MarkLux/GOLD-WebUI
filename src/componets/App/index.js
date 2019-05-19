@@ -4,6 +4,7 @@ import './index.css';
 import MenuAppBar from '../NavBar'
 import MenuList from '../MenuList'
 import FunctionTable from '../FunctionTable'
+import CreateFunction from '../CreateFunction'
 import { Grid } from '@material-ui/core';
 
 class App extends Component {
@@ -27,7 +28,8 @@ class App extends Component {
                         <MenuList />
                     </Grid>
                     <Grid item xs={10} style={{padding: '20px'}}>
-                        <FunctionTable />
+                        {/* <FunctionTable /> */}
+                        <CreateFunction />
                     </Grid>
                 </Grid>
             </div>
