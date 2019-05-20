@@ -21,6 +21,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { Link } from 'react-router'
+
+import './index.css';
 
 let counter = 0;
 function createData(name, creator, status, gitHead, updatedAt, operations, dashboard) {
@@ -292,7 +295,9 @@ class FunctionTable extends React.Component {
                         <OperateMenu />
                       </TableCell>
                       <TableCell>
+                        <a href="http://marklux.cn:8888/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/cluster?namespace=gold">
                         <Button><Explore /></Button>
+                        </a>
                       </TableCell>
                     </TableRow>
                   );
@@ -356,9 +361,17 @@ class OperateMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>预览</MenuItem>
+          <Link to="/service/preview" className="Menu-link">
+          <MenuItem onClick={this.handleClose}>
+            预览
+          </MenuItem>
+          </Link>
+          <Link to="/service/publish" className="Menu-link">
           <MenuItem onClick={this.handleClose}>发布</MenuItem>
+          </Link>
+          <Link to="/service/rollback" className="Menu-link">
           <MenuItem onClick={this.handleClose}>回滚</MenuItem>
+          </Link>
         </Menu>
       </div>
     );

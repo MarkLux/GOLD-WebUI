@@ -3,6 +3,7 @@ import { browserHistory, hashHistory, Route, Router, IndexRoute } from 'react-ro
 import App from '../components/App/index'
 import FunctionTable from '../components/FunctionTable'
 import CreateFunction from '../components/CreateFunction'
+import PreviewFunction from '../components/PreviewFunction'
 // 临时占位组件
 import Placeholder from '../components/Placeholder'
 
@@ -17,6 +18,7 @@ const AppRouter = ()=>{
         <IndexRoute component={FunctionTable} />
         <Route path='/service/list' component={FunctionTable} />
         <Route path='/service/create' component={CreateFunction} />
+        <Route path='/service/preview' component={PreviewFunction} />
         <Route path='/doing' component={FunctionTable} />
         <Route path='/history' component={Placeholder} />
       </Route>
