@@ -22,7 +22,7 @@ class MenuList extends React.Component {
             component="nav" 
             subheader={<ListSubheader component="div" style={{fontSize: '18px'}}>服务</ListSubheader>}
             >
-                <Link to="/server-list" className="Menu-link">
+                <Link to="/service/list" className="Menu-link">
                     <ListItem button>
                         <ListItemIcon>
                             <SortIcon />
@@ -30,7 +30,7 @@ class MenuList extends React.Component {
                         <ListItemText inset primary="服务列表" />
                     </ListItem>
                 </Link>
-                <Link to="/server-create" className="Menu-link">
+                <Link to="/service/create" className="Menu-link">
                     <ListItem button>
                         <ListItemIcon>
                             <AddCircleIcon />

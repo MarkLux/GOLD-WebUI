@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory, hashHistory, Route, Router, IndexRoute } from 'react-router';
 import App from '../components/App/index'
 import FunctionTable from '../components/FunctionTable'
+import CreateFunction from '../components/CreateFunction'
 // 临时占位组件
 import Placeholder from '../components/Placeholder'
 
@@ -14,8 +15,8 @@ const AppRouter = ()=>{
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={FunctionTable} />
-        <Route path='/server-list' component={FunctionTable} />
-        <Route path='/server-create' component={Placeholder} />
+        <Route path='/service/list' component={FunctionTable} />
+        <Route path='/service/create' component={CreateFunction} />
         <Route path='/doing' component={FunctionTable} />
         <Route path='/history' component={Placeholder} />
       </Route>
