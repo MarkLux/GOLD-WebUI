@@ -4,6 +4,8 @@ import App from '../components/App/index'
 import FunctionTable from '../components/FunctionTable'
 import CreateFunction from '../components/CreateFunction'
 import PreviewFunction from '../components/PreviewFunction'
+import PublishFunction from '../components/PublishFunction'
+import LogDetail from '../components/LogDetail'
 // 临时占位组件
 import Placeholder from '../components/Placeholder'
 
@@ -19,6 +21,8 @@ const AppRouter = ()=>{
         <Route path='/service/list' component={FunctionTable} />
         <Route path='/service/create' component={CreateFunction} />
         <Route path='/service/preview' component={PreviewFunction} />
+        <Route path='/service/publish' component={PublishFunction} />
+        <Route path='/oplog/detail' component={LogDetail} />
         <Route path='/doing' component={FunctionTable} />
         <Route path='/history' component={Placeholder} />
       </Route>

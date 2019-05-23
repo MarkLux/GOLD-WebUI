@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Build from '@material-ui/icons/Build';
+import Send from '@material-ui/icons/Send';
 
 const styles = theme => ({
     root: {
@@ -20,7 +20,7 @@ const styles = theme => ({
     },
 });
 
-class PreviewFunction extends React.Component {
+class PublishFunction extends React.Component {
     state = {
         name: '',
         functionId: 1,
@@ -39,7 +39,7 @@ class PreviewFunction extends React.Component {
             <div>
                 <Paper className={classes.root} elevation={1}>
                     <Typography variant="h5" component="h3">
-                        服务预览
+                        服务发布
                     </Typography>
                     <FormControl style={{ width: '100%' }}>
                         <br />
@@ -94,7 +94,7 @@ class PreviewFunction extends React.Component {
                             />
                         </Grid>
                         <Typography variant="h6" component="h3">
-                        预览环境配置
+                        发布信息确认
                         </Typography>
                         <Grid container>
                             <TextField
@@ -117,8 +117,8 @@ class PreviewFunction extends React.Component {
                             />
                         </Grid>
                         <Button variant="contained" color="primary" className={classes.button}>
-                            预览构建
-                            <Build className={classes.rightIcon} />
+                            发布服务
+                            <Send className={classes.rightIcon} />
                         </Button>
                     </FormControl>
                 </Paper>
@@ -127,8 +127,8 @@ class PreviewFunction extends React.Component {
     }
 }
 
-PreviewFunction.propTypes = {
+PublishFunction.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PreviewFunction);
+export default withStyles(styles)(PublishFunction);
