@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Send from '@material-ui/icons/Send';
+import { browserHistory } from 'react-router'
+import querystring from 'querystring'
 
 const styles = theme => ({
     root: {
@@ -21,9 +23,14 @@ const styles = theme => ({
 });
 
 class PublishFunction extends React.Component {
+
     state = {
         name: '',
-        functionId: 1,
+        serviceName: '',
+        gitHead: '',
+        gitBranch: '',
+        maintainer: '',
+        functionId: 0,
         targetBranch: 'master',
         targetVersion: 'daf3123',
     };
@@ -32,8 +39,16 @@ class PublishFunction extends React.Component {
         this.setState({ [name]: event.target.value });
     };
 
+    handleSubmit = id => {
+        window.confirm('操作执行成功，即将跳转到详情页面')
+        window.location.href = 'http://10.15.1.33:3000/#/oplog/detail?id=10'
+    }
+
     render() {
         const { classes } = this.props;
+
+        let qs = browserHistory.getCurrentLocation().hash.split('?')
+        let query = querystring.parse(qs[1])
 
         return (
             <div>
@@ -49,7 +64,7 @@ class PublishFunction extends React.Component {
                         <TextField
                             id="serviceName"
                             label="服务名称"
-                            defaultValue="greeting-service"
+                            defaultValue={query.serviceName}
                             style={{ margin: 8 }}
                             margin="normal"
                             InputProps={{
@@ -60,7 +75,7 @@ class PublishFunction extends React.Component {
                             id="gitRepo"
                             label="github仓库"
                             style={{ margin: 8 }}
-                            defaultValue="https://github.com/MarkLux/faas-demo-greeting"
+                            defaultValue={"https://github.com/" + query.maintainer + "/" + query.gitRepo}
                             helperText="关联的github仓库"
                             margin="normal"
                             InputProps={{
@@ -71,7 +86,7 @@ class PublishFunction extends React.Component {
                             <TextField
                                 id="currentBranch"
                                 label="当前分支"
-                                defaultValue="master"
+                                defaultValue={query.gitBranch}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -83,7 +98,7 @@ class PublishFunction extends React.Component {
                             <TextField
                                 id="currentVersion"
                                 label="当前版本"
-                                defaultValue="-"
+                                defaultValue={query.gitHead}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -109,14 +124,14 @@ class PublishFunction extends React.Component {
                             <TextField
                                 id="targetVersion"
                                 label="目标版本"
-                                defaultValue="fa2cd15"
+                                defaultValue=""
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
                             />
                         </Grid>
-                        <Button variant="contained" color="primary" className={classes.button}>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={() => {this.handleSubmit(query.fid)}}>
                             发布服务
                             <Send className={classes.rightIcon} />
                         </Button>

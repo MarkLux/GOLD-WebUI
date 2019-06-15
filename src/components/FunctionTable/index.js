@@ -26,9 +26,11 @@ import { Link } from 'react-router'
 import './index.css';
 
 let counter = 0;
-function createData(name, creator, status, gitHead, updatedAt, operations, dashboard) {
+function createData(name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo) {
+  let date = new Date(parseInt(updatedAt * 1000))
+  updatedAt = date.toLocaleDateString() + " " + date.toLocaleTimeString()
   counter += 1;
-  return { id: counter, name, creator, status, gitHead, updatedAt, operations, dashboard };
+  return { id: counter, name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo};
 }
 
 function desc(a, b, orderBy) {
@@ -193,15 +195,35 @@ class FunctionTable extends React.Component {
     orderBy: 'name',
     selected: [],
     data: [
-      createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
-      createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
-      createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
-      createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
-      createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
+      // createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
+      // createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
+      // createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
+      // createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
+      // createData('greeting-service', 'lumin', 'CREATED', 'e1fab3', '2019-04-22 00:00:00', '-', '-'),
     ],
     page: 0,
     rowsPerPage: 5,
   };
+
+  componentDidMount() {
+    fetch('http://marklux.cn:8094/function/service/list', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(json => {
+      if (json.data.results) {
+        console.log('aaa')
+        let d = []
+        json.data.results.forEach(e => {
+          d.push(createData(e.serviceName, e.creatorName, e.status, e.gitHead, e.updatedAt, e.gitMaintainer, e.gitBranch, e.gitRepo))
+        });
+        this.setState({data: d})
+      }
+    })
+  }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -292,10 +314,10 @@ class FunctionTable extends React.Component {
                       <TableCell align="left">{n.gitHead}</TableCell>
                       <TableCell align="left">{n.updatedAt}</TableCell>
                       <TableCell align="left">
-                        <OperateMenu />
+                        <OperateMenu fId={n.id} serviceName={n.name} maintainer={n.maintainer} gitRepo={n.gitRepo} gitHead={n.gitHead} gitBranch={n.gitBranch} />
                       </TableCell>
                       <TableCell>
-                        <a href="http://marklux.cn:8888/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/cluster?namespace=gold">
+                        <a href={"http://0.0.0.0:8888/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/deployment/gold/" + n.name + "?namespace=gold"}>
                         <Button><Explore /></Button>
                         </a>
                       </TableCell>
@@ -366,7 +388,7 @@ class OperateMenu extends React.Component {
             预览
           </MenuItem>
           </Link>
-          <Link to="/service/publish" className="Menu-link">
+          <Link to={"/service/publish?serviceName=" + this.props.serviceName + "&maintainer=" + this.props.maintainer + "&gitHead=" + this.props.gitHead + "&gitBranch=" + this.props.gitBranch + "&fid=" + this.props.fId + "&gitRepo=" + this.props.gitRepo} className="Menu-link">
           <MenuItem onClick={this.handleClose}>发布</MenuItem>
           </Link>
           <Link to="/service/rollback" className="Menu-link">

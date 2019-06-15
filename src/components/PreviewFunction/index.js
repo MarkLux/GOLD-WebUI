@@ -49,7 +49,7 @@ class PreviewFunction extends React.Component {
                         <TextField
                             id="serviceName"
                             label="服务名称"
-                            defaultValue="greeting-service"
+                            defaultValue="form-service"
                             style={{ margin: 8 }}
                             margin="normal"
                             InputProps={{
@@ -60,7 +60,7 @@ class PreviewFunction extends React.Component {
                             id="gitRepo"
                             label="github仓库"
                             style={{ margin: 8 }}
-                            defaultValue="https://github.com/MarkLux/faas-demo-greeting"
+                            defaultValue="https://github.com/MarkLux/faas-demo-form"
                             helperText="关联的github仓库"
                             margin="normal"
                             InputProps={{

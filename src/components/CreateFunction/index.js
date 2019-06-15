@@ -32,6 +32,12 @@ class CreateFunction extends React.Component {
         this.setState({ [name]: event.target.value });
     };
 
+    handleSubmit() {
+        if (window.confirm('发布成功，即将跳转到服务列表')) {
+            window.location.href = '/'
+        }
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -117,7 +123,7 @@ class CreateFunction extends React.Component {
                             />
                         </Grid>
                         <br />
-                        <Button variant="contained" color="primary" className={classes.button}>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={() => {this.handleSubmit()}}>
                             创建服务
                             <Backup className={classes.rightIcon}/>
                         </Button> 

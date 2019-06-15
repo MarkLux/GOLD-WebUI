@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TrendingFlat from '@material-ui/icons/TrendingFlat';
+import querystring from 'querystring'
+import { browserHistory } from 'react-router'
 
 const styles = theme => ({
     root: {
@@ -20,7 +22,100 @@ const styles = theme => ({
     },
 });
 
+
 class LogDetail extends React.Component {
+
+    state = {
+        serviceId: '',
+        operator: '',
+        type: '',
+        start: '',
+        update: '',
+        end: '',
+        currentAction: '',
+        log: '',
+        reason: '',
+        originBranch: '',
+        originVersion: '',
+        targetBranch: '',
+        targetVersion: ''
+    }
+    
+    transferServiceName(id) {
+        if(id == '1') {
+            return 'greeting-demo'
+        } else if (id == '2') {
+            return 'form-demo'
+        } else {
+            return 'greeting-demo'
+        }
+    }
+
+    transferDate(raw) {
+        console.log(raw)
+        let date = new Date(parseInt(raw) * 1000)
+        return date.toLocaleDateString() + " " + date.toLocaleTimeString()
+    }
+
+    transferType(raw) {
+        if (raw == 'PUBLISH') {
+            return '发布'
+        } else if(raw == 'ROLL_BACK') {
+            return '回滚'
+        } else {
+            return '未知'
+        }
+    }
+
+    transferAction(raw) {
+        if (raw == 'IMG_BUILDING') {
+            return '镜像构建中'
+        } else if (raw == 'IMG_PUSHING') {
+            return '镜像上传中'
+        } else if (raw == 'PUBLISHING') {
+            return '服务发布中'
+        } else if (raw == 'FINISH') {
+            return '完成'
+        } else if (raw == 'FAILED') {
+            return '异常'
+        } else {
+            return '???'
+        }
+    }
+
+    componentDidMount() {
+        let qs = browserHistory.getCurrentLocation().hash.split('?')
+        let query = querystring.parse(qs[1])
+        let url = 'http://marklux.cn:8094/operate/log/detail?opId=' + query.id
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .then(json => {
+            if (json.data) {
+                this.setState({
+                    serviceId: json.data.serviceId,
+                    operator: json.data.operator,
+                    type: json.data.type,
+                    start: json.data.start,
+                    update: json.data.update,
+                    end: json.data.end,
+                    currentAction: json.data.currentAction,
+                    log: json.data.log,
+                    reason: json.data.reason,
+                    originBranch: json.data.originBranch,
+                    originVersion: json.data.originVersion,
+                    targetBranch: json.data.targetBranch,
+                    targetVersion: json.data.targetVersion
+                })
+                console.log(this.state)
+            }
+        })
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -43,7 +138,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="service"
                             label="目标服务"
-                            defaultValue="greeting-service"
+                            value={this.transferServiceName(this.state.serviceId)}
                             style={{ margin: 8, width: '31%' }}
                             InputProps={{
                                 readOnly: true,
@@ -63,7 +158,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="type"
                             label="操作类型"
-                            defaultValue="发布"
+                            value={this.transferType(this.state.type)}
                             style={{ margin: 8, width: '31%' }}
                             InputProps={{
                                 readOnly: true,
@@ -80,7 +175,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="originBranch"
                             label="原始分支"
-                            defaultValue="master"
+                            value={this.state.originBranch}
                             style={{ margin: 8, width: '22%' }}
                             InputProps={{
                                 readOnly: true,
@@ -90,7 +185,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="originVersion"
                             label="原始版本"
-                            defaultValue="－"
+                            value={this.state.originVersion}
                             style={{ margin: 8, width: '22%' }}
                             InputProps={{
                                 readOnly: true,
@@ -101,7 +196,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="targetBarnch"
                             label="目标分支"
-                            defaultValue="master"
+                            value={this.state.targetBranch}
                             style={{ margin: 8, width: '22%' }}
                             InputProps={{
                                 readOnly: true,
@@ -111,7 +206,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="targetVersion"
                             label="目标版本"
-                            defaultValue="fa2cd15"
+                            value={this.state.targetVersion}
                             style={{ margin: 8, width: '22%' }}
                             InputProps={{
                                 readOnly: true,
@@ -128,7 +223,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="currentAction"
                             label="当前动作"
-                            defaultValue="镜像构建中"
+                            value={this.transferAction(this.state.currentAction)}
                             style={{ margin: 8, width: '31%' }}
                             InputProps={{
                                 readOnly: true,
@@ -138,7 +233,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="udpate"
                             label="更新时间"
-                            defaultValue="2019-04-22 10:06:45"
+                            value={this.transferDate(this.state.update)}
                             style={{ margin: 8, width: '31%' }}
                             InputProps={{
                                 readOnly: true,
@@ -148,7 +243,7 @@ class LogDetail extends React.Component {
                         <TextField
                             id="start"
                             label="开始时间"
-                            defaultValue="2019-04-22 10:05:31"
+                            value={this.transferDate(this.state.start)}
                             style={{ margin: 8, width: '31%' }}
                             InputProps={{
                                 readOnly: true,
@@ -163,7 +258,7 @@ class LogDetail extends React.Component {
                     <br />
                     <TextField
                             id="log"
-                            value={mocklog}
+                            value={this.state.log}
                             multiline
                             style={{ margin: 8, width: '96%' }}
                             InputProps={{
