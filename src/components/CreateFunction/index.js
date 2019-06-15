@@ -22,20 +22,38 @@ const styles = theme => ({
 
 class CreateFunction extends React.Component {
     state = {
-        name: 'Cat in the Hat',
-        age: '',
-        multiline: 'Controlled',
-        currency: 'EUR',
+        minInstance: '1',
+        maxInstance: '4'
     };
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
 
-    handleSubmit() {
-        if (window.confirm('发布成功，即将跳转到服务列表')) {
-            window.location.href = '/'
-        }
+    handleSubmit = () => {
+        console.log(this.state)
+        let body = {...this.state}
+        body.minInstance=parseInt(body.minInstance)
+        body.maxInstance=parseInt(body.maxInstance)
+
+        fetch('http://marklux.cn:8094/function/service', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(res => res.json())
+        .then(json => {
+            if (json.data && json.code == 0) {
+                console.log('aaa')
+                if (window.confirm('发布成功，即将跳转到服务列表')) {
+                    window.location.href = '/'
+                }
+            } else {
+                alert('数据错误，请检查您的表单输入')
+            }
+        })
     }
 
     render() {
@@ -57,6 +75,7 @@ class CreateFunction extends React.Component {
                             label="服务名称"
                             style={{ margin: 8 }}
                             helperText="服务名必须仅包含小写英文字母，数字及中划线（-）"
+                            onChange={this.handleChange('serviceName')}
                             fullWidth
                             margin="normal"
                         />
@@ -68,6 +87,7 @@ class CreateFunction extends React.Component {
                             id="gitRepo"
                             label="github仓库名"
                             style={{ margin: 8 }}
+                            onChange={this.handleChange('gitRepo')}
                             helperText="关联的github仓库名，如GOLD-Bootstrap"
                             // fullWidth
                             margin="normal"
@@ -75,6 +95,7 @@ class CreateFunction extends React.Component {
                         <TextField
                             id="gitMaintainer"
                             label="github用户名"
+                            onChange={this.handleChange('gitMaintainer')}
                             style={{ margin: 8 }}
                             helperText="github仓库的创建者"
                             // fullWidth
@@ -83,6 +104,7 @@ class CreateFunction extends React.Component {
                         <TextField
                             id="gitBranch"
                             label="git分支"
+                            onChange={this.handleChange('gitBranch')}
                             style={{ margin: 8 }}
                             helperText="设定代码仓库初始化时追踪的代码分支，默认为master"
                             // fullWidth
@@ -92,6 +114,7 @@ class CreateFunction extends React.Component {
                             id="gitHead"
                             label="代码版本"
                             style={{ margin: 8 }}
+                            onChange={this.handleChange('gitHead')}
                             helperText="设定代码仓库初始化时使用的代码版本（commit-id），默认使用分支最新提交"
                             // fullWidth
                             margin="normal"
@@ -106,6 +129,7 @@ class CreateFunction extends React.Component {
                                 label="最小实例数量"
                                 type="number"
                                 defaultValue="1"
+                                onChange={this.handleChange('minInstance')}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -116,6 +140,7 @@ class CreateFunction extends React.Component {
                                 label="最大实例数量"
                                 type="number"
                                 defaultValue="4"
+                                onChange={this.handleChange('maxInstance')}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -123,7 +148,7 @@ class CreateFunction extends React.Component {
                             />
                         </Grid>
                         <br />
-                        <Button variant="contained" color="primary" className={classes.button} onClick={() => {this.handleSubmit()}}>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={this.handleSubmit}>
                             创建服务
                             <Backup className={classes.rightIcon}/>
                         </Button> 

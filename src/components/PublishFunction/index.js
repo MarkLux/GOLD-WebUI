@@ -40,8 +40,28 @@ class PublishFunction extends React.Component {
     };
 
     handleSubmit = id => {
-        window.confirm('操作执行成功，即将跳转到详情页面')
-        window.location.href = 'http://10.15.1.33:3000/#/oplog/detail?id=10'
+        let body = {
+            functionId: parseInt(id),
+            targetBranch: this.state.targetBranch,
+            targetVersion: this.state.targetVersion
+        }
+        fetch('http://marklux.cn:8094/function/service/publish', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(res => res.json())
+        .then(json => {
+            console.log(json)
+            if (json.data && json.code == 0) {
+                window.confirm('操作执行成功，即将跳转到详情页面')
+                window.location.href = 'http://0.0.0.0:3000/#/oplog/detail?id=' + json.data.log_id
+            } else {
+                alert('数据错误，请检查您的表单输入')
+            }
+        })
     }
 
     render() {
@@ -116,6 +136,7 @@ class PublishFunction extends React.Component {
                                 id="targetBranch"
                                 label="目标分支"
                                 defaultValue="master"
+                                onChange={this.handleChange('targetBranch')}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -125,6 +146,7 @@ class PublishFunction extends React.Component {
                                 id="targetVersion"
                                 label="目标版本"
                                 defaultValue=""
+                                onChange={this.handleChange('targetVersion')}
                                 style={{ margin: 8, width: '47%' }}
                                 InputLabelProps={{
                                     shrink: true,

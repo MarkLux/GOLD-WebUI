@@ -26,11 +26,11 @@ import { Link } from 'react-router'
 import './index.css';
 
 let counter = 0;
-function createData(name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo) {
+function createData(id, name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo) {
   let date = new Date(parseInt(updatedAt * 1000))
   updatedAt = date.toLocaleDateString() + " " + date.toLocaleTimeString()
   counter += 1;
-  return { id: counter, name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo};
+  return { id: id, name, creator, status, gitHead, updatedAt, maintainer, gitBranch, gitRepo};
 }
 
 function desc(a, b, orderBy) {
@@ -218,7 +218,7 @@ class FunctionTable extends React.Component {
         console.log('aaa')
         let d = []
         json.data.results.forEach(e => {
-          d.push(createData(e.serviceName, e.creatorName, e.status, e.gitHead, e.updatedAt, e.gitMaintainer, e.gitBranch, e.gitRepo))
+          d.push(createData(e.id, e.serviceName, e.creatorName, e.status, e.gitHead, e.updatedAt, e.gitMaintainer, e.gitBranch, e.gitRepo))
         });
         this.setState({data: d})
       }
@@ -317,7 +317,7 @@ class FunctionTable extends React.Component {
                         <OperateMenu fId={n.id} serviceName={n.name} maintainer={n.maintainer} gitRepo={n.gitRepo} gitHead={n.gitHead} gitBranch={n.gitBranch} />
                       </TableCell>
                       <TableCell>
-                        <a href={"http://0.0.0.0:8888/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/deployment/gold/" + n.name + "?namespace=gold"}>
+                        <a href={"http://marklux.cn:8888/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/deployment/gold/" + n.name + "?namespace=gold"}>
                         <Button><Explore /></Button>
                         </a>
                       </TableCell>
